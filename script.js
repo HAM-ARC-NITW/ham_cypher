@@ -3,16 +3,43 @@ const TARGET_HASH = "582969a27a84f2b65970db6cb1907706e6518405ced1876352f6627d794
 const STATIONS = [
   { label: "Question 1", url: "https://cipherq1.netlify.app" },
   { label: "Question 2", url: "https://idyllic-figolla-8799a8.netlify.app/" },
-  { label: "Question 3", url: "https://mafia-wiretap.netlify.app/" },
+  { label: "Question 3", url: "cypher3/cypher_3.html" },
   { label: "Question 4", url: "https://mafia-cipher.netlify.app" },
   { label: "Question 5", url: "/final/final.html" }
 ];
-
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LETTER_H = 46;
 const LOOPS = 3;
 const state = new Array(NUM_RINGS).fill(26);
+
+// --- Background Persistent Timer Logic ---
+let cipherStartTime = localStorage.getItem('cipher_start_time');
+if (!cipherStartTime || isNaN(cipherStartTime)) {
+    cipherStartTime = Date.now();
+    localStorage.setItem('cipher_start_time', cipherStartTime);
+} else {
+    cipherStartTime = parseInt(cipherStartTime);
+}
+
+let isCipherSolved = localStorage.getItem('cipher_solved') === 'true';
+
+function updateBackgroundTimer() {
+    const timerEl = document.getElementById('persistent-timer');
+    if (!timerEl) return;
+
+    if (isCipherSolved) {
+        // Keep final solved time displayed or static
+        return;
+    }
+
+    const elapsed = Date.now() - cipherStartTime;
+    const minutes = Math.floor(elapsed / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    
+    timerEl.textContent = `Time Elapsed: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    requestAnimationFrame(updateBackgroundTimer);
+}
 
 function renderStations(){
   const list = document.getElementById('stationsList');
@@ -80,7 +107,7 @@ function step(i, dir){
 
   clearTimeout(reel._settleTimer);
   reel._settleTimer = setTimeout(() => {
-    const mid = ALPHABET.length; // middle copy start
+    const mid = ALPHABET.length; 
     if (state[i] < ALPHABET.length || state[i] > ALPHABET.length * (LOOPS - 1)){
       const letterIndex = ((state[i] % ALPHABET.length) + ALPHABET.length) % ALPHABET.length;
       state[i] = mid + letterIndex;
@@ -108,6 +135,9 @@ async function attemptOpen(){
   const row = document.querySelector('.cryptex-row');
 
   if (hash === TARGET_HASH){
+    isCipherSolved = true;
+    localStorage.setItem('cipher_solved', 'true');
+
     indicator.classList.add('open');
     resist.classList.remove('show');
     document.querySelectorAll('.ring').forEach((r, idx) => {
@@ -126,4 +156,5 @@ async function attemptOpen(){
 
 buildRings();
 renderStations();
+updateBackgroundTimer();
 document.getElementById('pullBtn').addEventListener('click', attemptOpen);
