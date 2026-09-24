@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Case File 05 — The Raven Cipher</title>
+<style>
+:root{--bg:#090807;--panel:#15110f;--line:#49342a;--text:#eee3d8;--muted:#aa9b8d;--red:#a9232b;--gold:#c8a35b;--green:#8dcc99}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#351615,#090807 55%);color:var(--text);font-family:Georgia,"Times New Roman",serif}.wrap{max-width:1050px;margin:auto;padding:25px 18px 55px}.head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px;color:var(--gold);font-size:12px;letter-spacing:2px}.hero{text-align:center;padding:32px 0}.seal{width:68px;height:68px;border:2px solid var(--gold);border-radius:50%;margin:auto;display:grid;place-items:center;font-size:30px;color:var(--gold)}h1{font-size:clamp(35px,7vw,65px);letter-spacing:3px;margin:15px 0 5px;text-transform:uppercase}.sub{color:var(--muted);font-style:italic}.grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px}.panel{background:linear-gradient(145deg,#181311,#0e0c0b);border:1px solid var(--line);border-radius:12px;padding:24px;box-shadow:0 15px 40px #0008}.panel h2{color:var(--gold);font-size:16px;letter-spacing:2px;margin:0 0 16px}.story{line-height:1.75;color:#d9cec3}.quote,.clue{border-left:3px solid var(--red);background:#100c0b;padding:13px 16px;margin:18px 0;line-height:1.65}.mapping{display:grid;grid-template-columns:1fr 1fr;gap:8px}.map{border:1px solid #3a2921;background:#0b0a09;border-radius:8px;padding:10px;text-align:center}.map b{font-size:25px;display:block}.map small{color:var(--gold)}.cards{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px 0}.card{width:72px;height:104px;background:#eee5da;color:#16110f;border-radius:8px;padding:7px;box-shadow:0 7px 16px #0009}.corner{font-weight:bold}.big{text-align:center;font-size:40px;margin-top:18px}.heart,.diamond{color:#b82931}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:9px;border-bottom:1px solid #30231e;text-align:center}.table th{color:var(--gold);font-size:11px}.input{width:100%;padding:14px;background:#090807;border:1px solid #574033;border-radius:8px;color:white;font:18px Georgia;text-align:center}.button{width:100%;padding:14px;margin-top:10px;border:0;border-radius:8px;background:var(--red);color:white;font:bold 15px Georgia;cursor:pointer}.button:hover{filter:brightness(1.12)}.feedback{text-align:center;min-height:25px;margin-top:12px;font-weight:bold}.ok{color:var(--green)}.bad{color:#e56f76}.final{margin-top:15px;border:1px solid var(--gold);background:#17120c;text-align:center;padding:20px;border-radius:9px}.final .letter{font-size:70px;color:#f5eadb;font-weight:bold}.hidden{display:none}.foot{text-align:center;color:#6e6259;font-size:12px;margin-top:25px}.hintbox{margin-top:16px;border:1px dashed #6a513d;padding:14px;border-radius:8px;background:#100c0a;color:#d9c8b7}.timer{color:var(--gold);font-weight:bold}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head"><span>DETECTIVE DIVISION • CONFIDENTIAL</span><span>CASE FILE 05</span></header>
+
+<section class="hero">
+<div class="seal">♠</div>
+<h1>The Raven's Cipher</h1>
+<div class="sub">A coded message intercepted from the city's most wanted Mafia family.</div>
+</section>
+
+<div class="grid">
+<section class="panel">
+<h2>01 — THE CASE</h2>
+<div class="story">
+<p>At 11:52 PM, Detective, you entered the abandoned Raven Room after receiving a warning from an informant known only as <b>"The Sparrow."</b></p>
+<p>The room was empty. On the table were several playing cards. No names. No address. No confession.</p>
+<div class="quote">"Numbers are never numbers in our code. Speak their names. The suit tells you where to look."</div>
+<p>One instruction was found underneath the deck:</p>
+</div>
+
+<div class="clue">
+<b>THE SPARROW'S CODE</b><br><br>
+♥ = Take the 1st letter<br>
+♦ = Take the 2nd letter<br>
+♣ = Take the 3rd letter<br>
+♠ = Take the 4th letter
+</div>
+
+<p style="color:#aa9b8d;line-height:1.6">
+The cards have been randomized for this investigation. Your message will not necessarily be the same as another detective's.
+</p>
+<div class="evidence-row" style="display:flex;justify-content:space-between;border-top:1px solid #30231e;padding-top:12px">
+<span>CASE TIMER</span><b id="timer" class="timer">05:00</b>
+</div>
+</section>
+
+<section class="panel">
+<h2>02 — THE EVIDENCE</h2>
+<p style="color:#aa9b8d;line-height:1.6">
+Decode the cards. Each card hides one letter. Find the hidden Mafia message.
+</p>
+
+<div class="cards" id="cards"></div>
+
+<div id="hint" class="hintbox hidden"></div>
+
+<form id="form">
+<label for="answer" style="display:block;color:#aa9b8d;margin:15px 0 7px">ENTER DECODED WORD</label>
+<input id="answer" class="input" maxlength="30" placeholder="What word did the Sparrow hide?">
+<button class="button" type="submit">SUBMIT EVIDENCE</button>
+</form>
+
+<div id="feedback" class="feedback" aria-live="polite"></div>
+
+<div id="final" class="final hidden">
+<div style="color:var(--gold);letter-spacing:3px;font-size:11px">EVIDENCE VERIFIED</div>
+<div class="letter">S</div>
+<div>YOUR FINAL LETTER</div>
+<p style="color:#aa9b8d">Keep this letter secret. It is part of the final Mafia investigation.</p>
+</div>
+</section>
+</div>
+<div class="foot">BLACK RAVEN FILES • AUTHORIZED DETECTIVES ONLY</div>
+</div>
+
+<script>
+const puzzles=[
+ {word:"STONE",cards:[["♥",6],["♥",2],["♦",4],["♣",9],["♠",5]]},
+ {word:"THIEF",cards:[["♥",2],["♦",3],["♦",8],["♠",5],["♥",4]]},
+ {word:"GHOST",cards:[["♣",8],["♦",3],["♦",4],["♥",6],["♥",2]]},
+ {word:"FIGHT",cards:[["♥",4],["♦",8],["♣",8],["♦",3],["♥",2]]},
+ {word:"HEIST",cards:[["♦",3],["♠",5],["♦",8],["♥",6],["♥",2]]},
+ {word:"SIGN",cards:[["♥",6],["♦",8],["♣",8],["♣",9]]},
+ {word:"SIGHT",cards:[["♥",6],["♦",8],["♣",8],["♦",3],["♥",2]]},
+ {word:"NINE",cards:[["♣",9],["♦",8],["♣",9],["♠",5]]},
+ {word:"FOUR",cards:[["♥",4],["♦",4],["♣",4],["♠",4]]},
+ {word:"EIGHT",cards:[["♠",5],["♦",8],["♣",8],["♦",3],["♥",2]]},
+ {word:"THREE",cards:[["♥",2],["♦",3],["♠",4],["♠",5],["♠",5]]}
+];
+
+const suitPos={"♥":1,"♦":2,"♣":3,"♠":4};
+const nums={1:"ONE",2:"TWO",3:"THREE",4:"FOUR",5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE",10:"TEN"};
+const chosen=puzzles[Math.floor(Math.random()*puzzles.length)];
+document.getElementById("cards").innerHTML=chosen.cards.map(([s,n])=>`
+<div class="card ${s==="♥"||s==="♦"?"heart":""}">
+<div class="corner">${n}<br>${s}</div><div class="big">${s}</div>
+</div>`).join("");
+
+let seconds=300, finished=false;
+const timer=document.getElementById("timer");
+const interval=setInterval(()=>{
+ if(finished)return;
+ seconds--;
+ const m=String(Math.floor(seconds/60)).padStart(2,"0"),s=String(seconds%60).padStart(2,"0");
+ timer.textContent=`${m}:${s}`;
+ if(seconds<=0){clearInterval(interval);timer.textContent="TIME";document.getElementById("feedback").textContent="Time is up. The case has gone cold.";document.getElementById("feedback").className="feedback bad";document.getElementById("answer").disabled=true;}
+},1000);
+
+setTimeout(()=>{
+ const hint=document.getElementById("hint");
+ hint.innerHTML="<b>FIELD NOTE UNLOCKED:</b><br>Convert each number into its English word. Then use the suit to select the required letter. <b>Do not reveal your answer to the other detectives.</b>";
+ hint.classList.remove("hidden");
+},120000);
+
+document.getElementById("form").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(finished)return;
+ const a=document.getElementById("answer").value.trim().toUpperCase();
+ const f=document.getElementById("feedback");
+ if(!a){f.textContent="The evidence field is empty.";f.className="feedback bad";return;}
+ if(a===chosen.word){
+   finished=true;clearInterval(interval);
+   f.textContent="✓ MESSAGE DECRYPTED — CASE SOLVED.";
+   f.className="feedback ok";
+   document.getElementById("final").classList.remove("hidden");
+ }else{
+   f.textContent="✕ INCORRECT — Re-examine the evidence.";
+   f.className="feedback bad";
+ }
+});
+</script>
+</body>
+</html>
