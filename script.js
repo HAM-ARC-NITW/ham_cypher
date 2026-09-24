@@ -4,7 +4,7 @@ const STATIONS = [
   { label: "Question 1", url: "q1/q1.html" },
   { label: "Question 2", url: "https://idyllic-figolla-8799a8.netlify.app/" },
   { label: "Question 3", url: "cypher3/cypher_3.html" },
-  { label: "Question 4", url: "https://mafia-cipher.netlify.app" },
+  { label: "Question 4", url: "question4/question4.html" },
   { label: "Question 5", url: "final/final.html" }
 ];
 
