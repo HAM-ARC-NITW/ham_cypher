@@ -89,17 +89,47 @@ main{padding-bottom:40px}
 .no p{margin:8px 0 0;font-size:18px;color:var(--mu)}
 @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 .ft{padding-bottom:28px;text-align:center;font:12px var(--type);letter-spacing:.3em;color:#6f624a}
+
+/* back to home (top left) */
+.back-to-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
 .back-to-home a {
   display: inline-block;
   padding: 10px 20px;
   color: var(--red-bright);
   text-decoration: none;
-  font-size: 14px;
+  font-size: large;
   font-weight: 600;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  border: 1px solid var(--red-bright);
+  border-radius: 6px;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
+.back-to-home a:hover {
+  background-color: var(--red-bright);
+  color: #fff;
+}
+
+/* completion home button */
+.completed-home-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: var(--br);
+  color: #15100d;
+  text-decoration: none;
+  font: 700 16px var(--serif);
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  transition: filter 0.2s ease;
+}
+.completed-home-btn:hover {
+  filter: brightness(1.15);
+}
+
 /* lightbox */
 #lb{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:#0b0908;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 #lb[hidden]{display:none}
@@ -116,12 +146,12 @@ main{padding-bottom:40px}
   <p class="eye">CASE FILE</p>
   <h1>The Six Clocks</h1>
   <p class="tag">Six cities. Six clocks. One secret.</p>
-  <span class="back-to-home">
-      <a href="../index.html">Back to Home</a>
-    </span>
 </header>
 
 <div class="bar" id="bar">
+  <span class="back-to-home">
+      <a href="../index.html">Back to Home</a>
+  </span>
   <div class="lbl" id="lbl">TIME REMAINING</div>
   <div class="tm" id="tm" role="timer" aria-live="off">04:00</div>
   <div class="prog"><i id="pg"></i></div>
@@ -173,8 +203,9 @@ const $=s=>document.querySelector(s);
 const CITIES=[["WASHINGTON",8],["BOSTON",4],["FRANKFURT",6],["FLORENCE",1],["SAN FRANCISCO",4],["OXFORD",3]];
 const HINTS=[
  {t:180,x:"Use each hour with its city name to extract a sequence of letters."},
- {t:60,x:"The sequence will lead you to two numbers."},
- {t:20,x:"The two numbers are coordinates. Use them on the Polybius Square to reveal the final letter."}];
+ {t:150,x:"Delhi[4]=h"},
+ {t:120,x:"The sequence will lead you to two numbers."},
+ {t:90,x:"The two numbers are coordinates. Use them on the Polybius Square to reveal the final letter."}];
 const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 
 /* ---- clock plate (inline SVG, numerals 1-12, hands frozen on the hour) ---- */
@@ -227,33 +258,75 @@ for(let c=1;c<=5;c++)g+=`<span class="pc">${c}</span>`;
 });
 $('#pg5').innerHTML=g;
 
-/* ---- countdown (wall-clock based, so it stays accurate) ---- */
-const TOTAL=240,END=Date.now()+TOTAL*1000,bar=$('#bar'),tm=$('#tm'),lbl=$('#lbl'),pg=$('#pg');
-let done=false,iv;
+/* ---- countdown & persistence via localStorage ---- */
+const TOTAL=240;
+let END = localStorage.getItem('six_clocks_end');
+if (!END) {
+  END = Date.now() + TOTAL * 1000;
+  localStorage.setItem('six_clocks_end', END);
+} else {
+  END = parseInt(END, 10);
+}
+
+const bar=$('#bar'),tm=$('#tm'),lbl=$('#lbl'),pg=$('#pg');
+let done = localStorage.getItem('six_clocks_done') === 'true';
+let iv;
+
 function tick(){
   if(done)return;
   const rem=Math.max(0,Math.ceil((END-Date.now())/1000));
   tm.textContent=fmt(rem);pg.style.width=(rem/TOTAL*100)+'%';
   bar.classList.toggle('low',rem<=20);
-  HINTS.forEach(h=>{if(!h.on&&rem<=h.t)unlock(h)});
-  if(rem<=0){done=true;clearInterval(iv);bar.classList.add('up');lbl.textContent="TIME'S UP";$('#go').disabled=true}
+  HINTS.forEach(h=>{if(!h.on && (TOTAL - rem) >= (TOTAL - h.t)) unlock(h);});
+  if(rem<=0){
+    clearInterval(iv);
+    bar.classList.add('up');
+    lbl.textContent="TIME'S UP";
+  }
 }
-tick();iv=setInterval(tick,250);
+
+// Pre-unlock hints if time has already passed (e.g., after refresh)
+const elapsed = TOTAL - Math.max(0, Math.ceil((END - Date.now()) / 1000));
+HINTS.forEach(h => {
+  if (elapsed >= (TOTAL - h.t)) unlock(h);
+});
+
+tick();
+iv=setInterval(tick,250);
 document.addEventListener('visibilitychange',tick);
 
 /* ---- answer ---- */
 const ans=$('#ans'),res=$('#res'),MAX=5;
-let tries=0;
+let tries = parseInt(localStorage.getItem('six_clocks_tries') || '0', 10);
+
+// Restore solved state if previously completed
+if (done) {
+  bar.classList.add('solved');
+  lbl.textContent='CASE SOLVED';
+  ans.disabled=$('#go').disabled=true;
+  res.innerHTML='<div class="ok"><h3>CASE CLOSED</h3><p>THE LETTER IS I</p><a class="completed-home-btn" href="../index.html">BACK TO HOME</a></div>';
+} else if (tries >= MAX) {
+  ans.disabled=$('#go').disabled=true;
+  res.innerHTML='<div class="no"><h3>NO ATTEMPTS LEFT</h3><p>Five guesses used.</p></div>';
+}
+
 $('#f').addEventListener('submit',e=>{
   e.preventDefault();
-  if($('#go').disabled)return;
+  if(done || tries >= MAX)return;
   const v=ans.value.trim().toUpperCase();
   if(!v){res.innerHTML='<div class="no"><h3>NO LETTER</h3><p>Type a single letter first.</p></div>';return}
   tries++;
+  localStorage.setItem('six_clocks_tries', tries);
+
   if(v==='I'){
-    done=true;clearInterval(iv);bar.classList.remove('low');bar.classList.add('solved');lbl.textContent='CASE SOLVED';
+    done=true;
+    localStorage.setItem('six_clocks_done', 'true');
+    clearInterval(iv);
+    bar.classList.remove('low');
+    bar.classList.add('solved');
+    lbl.textContent='CASE SOLVED';
     ans.disabled=$('#go').disabled=true;
-    res.innerHTML='<div class="ok"><h3>CASE CLOSED</h3><p>THE LETTER IS I</p></div>';
+    res.innerHTML='<div class="ok"><h3>CASE CLOSED</h3><p>THE LETTER IS I</p><a class="completed-home-btn" href="../index.html">BACK TO HOME</a></div>';
   }else if(tries>=MAX){
     ans.disabled=$('#go').disabled=true;
     res.innerHTML='<div class="no"><h3>NO ATTEMPTS LEFT</h3><p>Five guesses used.</p></div>';
@@ -268,4 +341,3 @@ $('#f').addEventListener('submit',e=>{
 </script>
 </body>
 </html>
-<script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="2e4cf237-2694-45f8-b46e-83b89533c4e3" data-app-host="app.netlify.com"></script>
