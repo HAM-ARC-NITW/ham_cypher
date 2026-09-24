@@ -8,11 +8,30 @@
 :root{--bg:#090807;--panel:#15110f;--line:#49342a;--text:#eee3d8;--muted:#aa9b8d;--red:#a9232b;--gold:#c8a35b;--green:#8dcc99}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#351615,#090807 55%);color:var(--text);font-family:Georgia,"Times New Roman",serif}.wrap{max-width:1050px;margin:auto;padding:25px 18px 55px}.head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px;color:var(--gold);font-size:12px;letter-spacing:2px}.hero{text-align:center;padding:32px 0}.seal{width:68px;height:68px;border:2px solid var(--gold);border-radius:50%;margin:auto;display:grid;place-items:center;font-size:30px;color:var(--gold)}h1{font-size:clamp(35px,7vw,65px);letter-spacing:3px;margin:15px 0 5px;text-transform:uppercase}.sub{color:var(--muted);font-style:italic}.grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px}.panel{background:linear-gradient(145deg,#181311,#0e0c0b);border:1px solid var(--line);border-radius:12px;padding:24px;box-shadow:0 15px 40px #0008}.panel h2{color:var(--gold);font-size:16px;letter-spacing:2px;margin:0 0 16px}.story{line-height:1.75;color:#d9cec3}.quote,.clue{border-left:3px solid var(--red);background:#100c0b;padding:13px 16px;margin:18px 0;line-height:1.65}.mapping{display:grid;grid-template-columns:1fr 1fr;gap:8px}.map{border:1px solid #3a2921;background:#0b0a09;border-radius:8px;padding:10px;text-align:center}.map b{font-size:25px;display:block}.map small{color:var(--gold)}.cards{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px 0}.card{width:72px;height:104px;background:#eee5da;color:#16110f;border-radius:8px;padding:7px;box-shadow:0 7px 16px #0009}.corner{font-weight:bold}.big{text-align:center;font-size:40px;margin-top:18px}.heart,.diamond{color:#b82931}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:9px;border-bottom:1px solid #30231e;text-align:center}.table th{color:var(--gold);font-size:11px}.input{width:100%;padding:14px;background:#090807;border:1px solid #574033;border-radius:8px;color:white;font:18px Georgia;text-align:center}.button{width:100%;padding:14px;margin-top:10px;border:0;border-radius:8px;background:var(--red);color:white;font:bold 15px Georgia;cursor:pointer}.button:hover{filter:brightness(1.12)}.feedback{text-align:center;min-height:25px;margin-top:12px;font-weight:bold}.ok{color:var(--green)}.bad{color:#e56f76}.final{margin-top:15px;border:1px solid var(--gold);background:#17120c;text-align:center;padding:20px;border-radius:9px}.final .letter{font-size:70px;color:#f5eadb;font-weight:bold}.hidden{display:none}.foot{text-align:center;color:#6e6259;font-size:12px;margin-top:25px}.hintbox{margin-top:16px;border:1px dashed #6a513d;padding:14px;border-radius:8px;background:#100c0a;color:#d9c8b7}.timer{color:var(--gold);font-weight:bold}
 @media(max-width:760px){.grid{grid-template-columns:1fr}}
+.back-to-home a {
+  display: inline-block;
+  padding: 10px 20px;
+  color: var(--red-bright);
+  text-decoration: none;
+  font-family:Georgia;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header class="head"><span>DETECTIVE DIVISION • CONFIDENTIAL</span><span>CASE FILE 05</span></header>
+
+<header class="head">
+    <span class="back-to-home">
+      <a href="/">Back to Home</a>
+    </span>    
+  <span>DETECTIVE DIVISION • CONFIDENTIAL</span>
+  <span>CASE FILE 05</span>
+</header>
 
 <section class="hero">
 <div class="seal">♠</div>

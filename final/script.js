@@ -6,7 +6,7 @@ const HINTS = [
   { at: 60, text: "There are free tools online built just for reading what's hidden inside a file (metadata) like this. Search for one of those sites" },
   { at: 120, text: "try exifdata.com or jimpl.com or metadata2go.com" },  
   { at: 180, text: "look for the author and copyright field" },  
-  { at: 240, text: "Somewhere in what it hands back is a line that isn't describing the picture at all -- it's describing where to go next (check picture location)." }
+  { at: 240, text: "one of the letters of the acronym this building is popularly referred to as" }
 ];
 
 let startTime = null;

@@ -1,11 +1,11 @@
 const NUM_RINGS = 5;
 const TARGET_HASH = "582969a27a84f2b65970db6cb1907706e6518405ced1876352f6627d794b430e";
 const STATIONS = [
-  { label: "Question 1", url: "/q1/q1.html" },
+  { label: "Question 1", url: "q1/q1.html" },
   { label: "Question 2", url: "https://idyllic-figolla-8799a8.netlify.app/" },
   { label: "Question 3", url: "cypher3/cypher_3.html" },
   { label: "Question 4", url: "https://mafia-cipher.netlify.app" },
-  { label: "Question 5", url: "/final/final.html" }
+  { label: "Question 5", url: "final/final.html" }
 ];
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -13,7 +13,6 @@ const LETTER_H = 46;
 const LOOPS = 3;
 const state = new Array(NUM_RINGS).fill(26);
 
-// --- Background Persistent Timer Logic ---
 let cipherStartTime = localStorage.getItem('cipher_start_time');
 if (!cipherStartTime || isNaN(cipherStartTime)) {
     cipherStartTime = Date.now();
@@ -65,7 +64,7 @@ function buildRings(){
 
     const up = document.createElement('div');
     up.className = 'tri tri-up';
-    up.addEventListener('click', () => step(i, 1));
+    up.addEventListener('click', () => step(i, -1));
 
     const win = document.createElement('div');
     win.className = 'letter-window';
@@ -80,7 +79,7 @@ function buildRings(){
 
     const down = document.createElement('div');
     down.className = 'tri tri-down';
-    down.addEventListener('click', () => step(i, -1));
+    down.addEventListener('click', () => step(i, 1));
 
     ring.addEventListener('wheel', (e) => {
       e.preventDefault();
@@ -88,8 +87,8 @@ function buildRings(){
     }, { passive:false });
 
     ring.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowUp'){ e.preventDefault(); step(i, 1); }
-      if (e.key === 'ArrowDown'){ e.preventDefault(); step(i, -1); }
+      if (e.key === 'ArrowDown'){ e.preventDefault(); step(i, 1); }
+      if (e.key === 'ArrowUp'){ e.preventDefault(); step(i, -1); }
     });
 
     ring.appendChild(up);
