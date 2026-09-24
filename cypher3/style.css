@@ -1,0 +1,94 @@
+body {
+    background-color: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    overflow: hidden;
+}
+
+.font-mono {
+    font-family: 'Courier Prime', monospace;
+}
+
+/* Scanline effect for cinematic wiretap feel */
+.scanlines::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 50;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* Custom Scrollbar for chat */
+#chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+#chat-container::-webkit-scrollbar-track {
+    background: #121212; 
+}
+#chat-container::-webkit-scrollbar-thumb {
+    background: #333; 
+    border-radius: 4px;
+}
+#chat-container::-webkit-scrollbar-thumb:hover {
+    background: #d4af37; 
+}
+
+.chat-bubble {
+    max-width: 80%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.boss-bubble {
+    background-color: #1a1a1a;
+    border-left: 3px solid #d4af37; /* Gold accent */
+    border-radius: 12px 12px 12px 2px;
+}
+
+.soldier-bubble {
+    background-color: #1f1515;
+    border-right: 3px solid #8a0303; /* Blood crimson accent */
+    border-radius: 12px 12px 2px 12px;
+    margin-left: auto;
+}
+
+.system-bubble {
+    background-color: transparent;
+    color: #888;
+    font-size: 0.8rem;
+    text-align: center;
+    margin: 10px auto;
+    border: 1px solid #333;
+    padding: 2px 12px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Glitch effect for timer */
+.glitch-text {
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.hint-locked {
+    opacity: 0.3;
+    filter: blur(2px);
+    transition: all 0.5s ease;
+}
+.hint-unlocked {
+    opacity: 1;
+    filter: blur(0);
+    border-color: #d4af37 !important;
+    color: #d4af37 !important;
+}

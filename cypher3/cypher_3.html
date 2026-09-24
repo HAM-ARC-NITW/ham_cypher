@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mafia Wiretap | Operation Intercept</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="scanlines flex flex-col h-screen">
+
+    <header class="bg-[#121212] border-b border-[#333] p-4 flex flex-col sm:flex-row justify-between items-center z-10 relative shadow-lg shadow-black/50">
+        <div class="flex items-center gap-4">
+            <!-- Home Button Placeholder -->
+            <a href="../index.html" class="border border-[#333] bg-[#1a1a1a] hover:border-[#d4af37] text-gray-300 hover:text-[#d4af37] text-xs font-mono py-1.5 px-3 rounded transition-colors flex items-center gap-1">
+                <span>&larr;</span> Home
+            </a>
+            <div>
+                <h1 class="text-xl font-bold tracking-widest text-gray-100 uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                    Wiretap Active
+                </h1>
+                <p class="text-xs text-gray-400 italic mt-1 font-mono">"No need to look far away..."</p>
+            </div>
+        </div>
+        <div class="mt-2 sm:mt-0 flex flex-col items-end">
+            <span class="text-xs text-[#d4af37] font-bold tracking-wider uppercase">Time Elapsed</span>
+            <div id="timer" class="text-3xl font-mono font-bold text-[#d4af37] glitch-text">00:00</div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
+        
+        <!-- Left: Chat Interface -->
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0d0d0d] relative pb-32 md:pb-4">
+            <!-- Messages will be injected here via JS -->
+        </div>
+
+        <!-- Right: Control Panel (Hints & Input) -->
+        <div class="w-full md:w-80 bg-[#121212] border-t md:border-t-0 md:border-l border-[#333] flex flex-col shrink-0 max-h-[50vh] md:max-h-full">
+            
+            <!-- Hints Section -->
+            <div class="flex-1 p-4 overflow-y-auto border-b border-[#333]">
+                <h2 class="text-[#d4af37] font-mono font-bold uppercase text-sm mb-4 border-b border-[#333] pb-1">Intel / Decryption Hints</h2>
+                
+                <div class="space-y-3 font-mono text-xs">
+                    <div id="hint-1" class="border border-gray-700 rounded p-3 text-gray-500 hint-locked">
+                        <span class="block font-bold mb-1 text-gray-400">[1:00] INTEL 1</span>
+                        Intercepted transmission seems to contain a hidden binary code hidden in plain sight.
+                    </div>
+                    <div id="hint-2" class="border border-gray-700 rounded p-3 text-gray-500 hint-locked">
+                        <span class="block font-bold mb-1 text-gray-400">[2:00] INTEL 2</span>
+                        I am the one who approves.
+                    </div>
+                    <div id="hint-3" class="border border-gray-700 rounded p-3 text-gray-500 hint-locked">
+                        <span class="block font-bold mb-1 text-gray-400">[3:00] INTEL 3</span>
+                        High is Yes and low is a no.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div id="input-section" class="p-4 bg-[#0a0a0a]">
+                <label for="binary-input" class="block text-xs font-mono text-gray-400 mb-2 uppercase">Enter Decrypted Binary Sequence:</label>
+                <div class="flex gap-2">
+                    <input type="text" id="binary-input" placeholder="e.g. 1010101" 
+                        class="flex-1 bg-[#1a1a1a] border border-[#333] text-[#d4af37] font-mono p-2 rounded focus:outline-none focus:border-[#d4af37] transition-colors"
+                        autocomplete="off" maxlength="10">
+                    <button id="submit-btn" class="bg-[#1a1a1a] border border-[#8a0303] text-[#8a0303] hover:bg-[#8a0303] hover:text-white font-bold py-2 px-4 rounded transition-colors font-mono">
+                        VERIFY
+                    </button>
+                </div>
+                <div id="error-msg" class="text-[#8a0303] text-xs font-mono mt-2 h-4 hidden">Invalid sequence. Try again.</div>
+            </div>
+
+            <!-- Success State (Hidden by default) -->
+            <div id="success-section" class="hidden p-6 h-full flex flex-col justify-center items-center bg-[#0a0a0a] text-center border-t border-[#d4af37]">
+                <div class="text-[#d4af37] mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-100 mb-1">
+                    Completed!
+                </h3>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Total Time Taken</p>
+                <div id="final-time" class="text-2xl font-mono text-[#d4af37] font-bold my-2">00:00</div>
+                
+                <!-- Return Home Button -->
+                <a href="../index.html" class="mt-4 bg-[#d4af37] hover:bg-[#b3922d] text-black font-bold font-mono py-2 px-6 rounded transition-colors text-xs uppercase tracking-wider">
+                    Return to Home
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
