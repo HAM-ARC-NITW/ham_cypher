@@ -2,7 +2,7 @@ const NUM_RINGS = 5;
 const TARGET_HASH = "582969a27a84f2b65970db6cb1907706e6518405ced1876352f6627d794b430e";
 const STATIONS = [
   { label: "Question 1", url: "q1/q1.html" },
-  { label: "Question 2", url: "Q2/index.html" },
+  { label: "Question 2", url: "Q2/q2.html" },
   { label: "Question 3", url: "cypher3/cypher_3.html" },
   { label: "Question 4", url: "question4/question4.html" },
   { label: "Question 5", url: "final/final.html" }
