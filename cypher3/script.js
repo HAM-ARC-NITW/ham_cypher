@@ -113,7 +113,7 @@ const chatDatabase = {
         ]
     },
     B: {
-        code: "01100010",
+        code: "0110011",
         messages: [
             { sender: "Boss", text: "Let's run through the checklist for the backup plan. Is the second car fueled up?" },
             { sender: "Soldier", text: "No. The gas gauge is sitting right on empty, boss. I totally forgot to top it off last night." },

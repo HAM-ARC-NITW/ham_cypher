@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=2e4cf237-2694-45f8-b46e-83b89533c4e3
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#100d0b">
+<title>The Six Clocks</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,500&family=Source+Sans+3:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100d0b;--pn:#1a1511;--cr:#e8dcc0;--mu:#b3a486;--br:#b8924a;--bh:#dcbc78;--rd:#8a2323;--rh:#c85050;
+--serif:'Playfair Display',Georgia,'Times New Roman',serif;--type:'Special Elite','Courier New',monospace;--sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:radial-gradient(120% 60% at 50% 0,#2a201a 0,#14100d 55%,#0d0a08 100%) #100d0b;color:var(--cr);font:17px/1.65 var(--sans);-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.09;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .7 0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.wrap{max-width:460px;margin:0 auto;padding:0 18px}
+button{font-family:inherit;touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bh);outline-offset:2px}
+
+/* header */
+.hd{position:relative;padding-top:22px}
+.eye{margin:0;font:14px var(--type);letter-spacing:.3em;color:var(--br)}
+h1{margin:.12em 0 .08em;font:900 clamp(38px,11.5vw,50px)/1.02 var(--serif);text-shadow:0 2px 0 #000}
+.tag{margin:0 0 18px;font:italic 500 18px var(--serif);color:var(--mu)}
+.stamp{position:absolute;right:18px;top:18px;transform:rotate(7deg);border:2px solid var(--rd);color:var(--rh);font:13px var(--type);letter-spacing:.2em;padding:3px 8px;opacity:.9}
+
+/* timer */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;text-align:center;padding-top:8px;background:rgba(16,13,11,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-top:1px solid #3a2e20;border-bottom:1px solid var(--br)}
+.lbl{font:13px var(--type);letter-spacing:.32em;color:var(--mu)}
+.tm{font:400 58px/1.05 var(--type);letter-spacing:.05em;font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(184,146,74,.28)}
+.prog{height:3px;margin-top:6px;background:#2a2118}.prog i{display:block;width:100%;height:100%;background:var(--br);transition:width .3s linear}
+.bar.low .tm{color:var(--rh)}.bar.low .prog i{background:var(--rd)}
+.bar.up .lbl{display:inline-block;margin-top:2px;padding:1px 12px;border:2px solid var(--rh);color:var(--rh);font-size:20px;letter-spacing:.2em;transform:rotate(-2deg)}
+.bar.solved .lbl{color:var(--bh)}
+
+/* sections */
+main{padding-bottom:40px}
+.sec{margin-top:38px}
+.sec h2{display:flex;align-items:center;gap:12px;margin:0 0 16px;font:400 15px var(--type);letter-spacing:.24em;text-transform:uppercase;color:var(--br)}
+.sec h2::before,.sec h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--br))}
+.sec h2::after{transform:scaleX(-1)}
+.brief p{margin:0 0 1.1em;font-size:18px}
+.brief p:first-child::first-letter{float:left;padding:.07em .1em 0 0;font:900 3.2em/.82 var(--serif);color:var(--br)}
+.brief blockquote{margin:1.1em 0 1.3em;padding:.1em 0 .1em 16px;border-left:3px solid var(--rd);font:italic 500 23px/1.35 var(--serif)}
+.cue{display:block;margin-top:6px;text-align:center;font:14px var(--type);letter-spacing:.2em;color:var(--br);text-decoration:none;padding:10px}
+
+/* clock plate */
+.plate{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.plate svg,#lbs svg{display:block;height:auto}
+.plate svg{width:100%;filter:drop-shadow(0 10px 22px rgba(0,0,0,.65))}
+.cap{margin:12px 0 0;text-align:center;font:13px var(--type);letter-spacing:.18em;color:var(--mu)}
+.n{font:700 19px var(--serif);fill:#1b1410;text-anchor:middle}
+.c{font:700 21px var(--serif);letter-spacing:1.2px;fill:#e8dcc0;text-anchor:middle}
+
+/* hints */
+.hint{margin-bottom:12px;border:1px solid #3a2e20;border-radius:3px;background:var(--pn)}
+.hint>button{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;padding:10px 14px;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+.hint b{flex:none;display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--br);border-radius:50%;font:700 16px var(--serif);color:var(--br)}
+.ht{display:block;font:700 19px var(--serif)}
+.hs{display:block;font:12px var(--type);letter-spacing:.14em;color:var(--mu)}
+.ch{margin-left:auto;color:var(--br);transition:transform .2s}
+.hint.open .ch{transform:rotate(180deg)}
+.hb{margin:0;padding:0 16px 18px 60px;font-size:18px}
+.hint.locked{border-style:dashed;opacity:.65}.hint.locked>button{cursor:default}.hint.locked .ch{visibility:hidden}
+.hint:not(.locked) .hs{display:inline-block;margin-top:3px;padding:1px 7px;border:1px solid var(--rh);color:var(--rh)}
+.fresh{animation:un .9s ease-out}
+@keyframes un{0%{opacity:0;transform:translateY(10px);box-shadow:0 0 0 0 rgba(184,146,74,.6)}60%{opacity:1;transform:none;box-shadow:0 0 0 9px rgba(184,146,74,0)}100%{box-shadow:none}}
+
+/* polybius */
+.pg{display:grid;grid-template-columns:32px repeat(5,1fr);gap:6px;padding:14px;background:var(--pn);border:1px solid var(--br);outline:1px solid #3a2e20;outline-offset:4px}
+.pc{display:grid;place-items:center;font:17px var(--type);color:var(--br)}
+.pl{display:grid;place-items:center;aspect-ratio:1;min-height:48px;padding:0;border:1px solid #4a3a26;border-radius:2px;background:#211a14;color:var(--cr);font:700 27px var(--serif);pointer-events:none;user-select:none}
+
+/* answer */
+#ans{display:block;width:100%;height:80px;padding:0;text-align:center;text-transform:uppercase;font:700 46px var(--serif);background:#0c0908;color:var(--cr);border:2px solid var(--br);border-radius:3px;caret-color:var(--br)}
+#go{display:block;width:100%;min-height:58px;margin-top:14px;border:1px solid var(--br);border-radius:3px;background:linear-gradient(#9a2a2a,#621515);color:var(--cr);font:700 19px var(--serif);letter-spacing:.32em;cursor:pointer}
+#go:active{filter:brightness(.85)}#go:disabled,#ans:disabled{opacity:.6}
+#res{margin-top:22px;text-align:center}
+.ok,.no{padding:26px 14px;border:2px solid;animation:pop .45s ease-out}
+.ok{border-color:var(--br);background:linear-gradient(#231b12,#15100c);outline:1px solid var(--br);outline-offset:5px}
+.ok h3{margin:0;font:900 34px/1.1 var(--serif);letter-spacing:.06em;color:var(--bh)}
+.ok p{margin:12px 0 0;font:20px var(--type);letter-spacing:.16em}
+.no{border-color:var(--rd);background:#1f0e0e}
+.no h3{margin:0;font:900 30px var(--serif);letter-spacing:.14em;color:var(--rh)}
+.no p{margin:8px 0 0;font-size:18px;color:var(--mu)}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.ft{padding-bottom:28px;text-align:center;font:12px var(--type);letter-spacing:.3em;color:#6f624a}
+
+/* back to home (top left) */
+.back-to-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.back-to-home a {
+  display: inline-block;
+  padding: 10px 20px;
+  color: var(--red-bright);
+  text-decoration: none;
+  font-size: large;
+  font-weight: 600;
+  border: 1px solid var(--red-bright);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.back-to-home a:hover {
+  background-color: var(--red-bright);
+  color: #fff;
+}
+
+/* completion home button */
+.completed-home-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: var(--br);
+  color: #15100d;
+  text-decoration: none;
+  font: 700 16px var(--serif);
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  transition: filter 0.2s ease;
+}
+.completed-home-btn:hover {
+  filter: brightness(1.15);
+}
+
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:#0b0908;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+#lb[hidden]{display:none}
+.lbh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 8px 6px 16px;border-bottom:1px solid var(--br);font:12px var(--type);letter-spacing:.14em;color:var(--mu)}
+#lbx{min-width:88px;min-height:46px;border:1px solid var(--br);border-radius:3px;background:#1a1511;color:var(--cr);font:14px var(--type);letter-spacing:.14em}
+#lbs{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px}
+#lbs svg{width:1020px;max-width:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="wrap hd">
+  <div class="stamp">CLASSIFIED</div>
+  <p class="eye">CASE FILE</p>
+  <h1>The Six Clocks</h1>
+  <p class="tag">Six cities. Six clocks. One secret.</p>
+</header>
+
+<div class="bar" id="bar">
+  <span class="back-to-home">
+      <a href="../index.html">Back to Home</a>
+  </span>
+  <div class="lbl" id="lbl">TIME REMAINING</div>
+  <div class="tm" id="tm" role="timer" aria-live="off">04:00</div>
+  <div class="prog"><i id="pg"></i></div>
+</div>
+
+<main class="wrap">
+  <section class="sec brief" style="margin-top:28px">
+    <p>The family has business spread across six cities: Frankfurt, Florence, San Francisco, Oxford, Washington, and Boston. Each city has its own clock, frozen at the hour when the family's business takes place. For generations, the family has followed one simple rule:</p>
+    <blockquote>The family works by the hour.</blockquote>
+    <p>The meaning behind the clocks has been lost, but the city names and the hours still remain. Something is hidden within them. Find the right way to use them and uncover the secret left behind by the family.</p>
+    <a class="cue" href="#clocks">▼ &nbsp;INSPECT THE CLOCKS&nbsp; ▼</a>
+  </section>
+
+  <section class="sec" id="clocks">
+    <h2>The Clocks</h2>
+    <button class="plate" id="plate" type="button" aria-label="Enlarge the six clocks"></button>
+    <p class="cap">TAP TO ENLARGE · DRAG TO PAN</p>
+  </section>
+
+  <section class="sec">
+    <h2>Hints</h2>
+    <div id="hints"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Polybius Square</h2>
+    <div class="pg" id="pg5"></div>
+    <p class="cap">5 × 5 CIPHER GRID</p>
+  </section>
+
+  <section class="sec">
+    <form id="f" novalidate autocomplete="off">
+      <h2><label for="ans">Enter the final letter</label></h2>
+      <input id="ans" type="text" maxlength="1" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">
+      <button id="go" type="submit">SUBMIT</button>
+    </form>
+    <div id="res" aria-live="polite"></div>
+  </section>
+</main>
+<footer class="wrap ft">BURN AFTER READING</footer>
+
+<div id="lb" hidden role="dialog" aria-label="Clocks, enlarged">
+  <div class="lbh"><span>DRAG TO PAN · PINCH TO ZOOM</span><button id="lbx" type="button">CLOSE ✕</button></div>
+  <div id="lbs"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const CITIES=[["WASHINGTON",8],["BOSTON",4],["FRANKFURT",6],["FLORENCE",1],["SAN FRANCISCO",4],["OXFORD",3]];
+const HINTS=[
+ {t:180,x:"Use each hour with its city name to extract a sequence of letters."},
+ {t:150,x:"Delhi[4]=h"},
+ {t:120,x:"The sequence will lead you to two numbers."},
+ {t:90,x:"The two numbers are coordinates. Use them on the Polybius Square to reveal the final letter."}];
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+
+/* ---- clock plate (inline SVG, numerals 1-12, hands frozen on the hour) ---- */
+function plate(u){
+  const R=Math.PI/180,f=v=>v.toFixed(1);
+  let s=`<svg viewBox="0 0 560 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six frozen clocks: ${CITIES.map(c=>c[0]+' '+c[1]+':00').join(', ')}"><defs>
+  <linearGradient id="b${u}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6c887"/><stop offset=".5" stop-color="#8a6529"/><stop offset="1" stop-color="#d4ac5e"/></linearGradient>
+  <radialGradient id="d${u}" cx=".5" cy=".42" r=".65"><stop offset="0" stop-color="#f4eacd"/><stop offset="1" stop-color="#c2ab78"/></radialGradient></defs>
+  <rect x="4" y="4" width="552" height="892" rx="4" fill="#15100d" stroke="url(#b${u})" stroke-width="3"/><rect x="13" y="13" width="534" height="874" fill="none" stroke="#6f5527"/>`;
+  CITIES.forEach(([n,h],i)=>{
+    const x=140+(i%2)*280,y=128+Math.floor(i/2)*290;let t='';
+    for(let k=0;k<60;k++){const a=k*6*R,r=k%5?80:74;t+=`M${f(x+r*Math.sin(a))} ${f(y-r*Math.cos(a))}L${f(x+83*Math.sin(a))} ${f(y-83*Math.cos(a))}`}
+    s+=`<circle cx="${x}" cy="${y}" r="98" fill="url(#b${u})"/><circle cx="${x}" cy="${y}" r="90" fill="#20160f"/><circle cx="${x}" cy="${y}" r="85" fill="url(#d${u})"/><path d="${t}" stroke="#2a1f16" stroke-width="1.5" fill="none"/>`;
+    for(let k=1;k<=12;k++){const a=k*30*R;s+=`<text class="n" x="${f(x+63*Math.sin(a))}" y="${f(y-63*Math.cos(a))}" dy=".35em">${k}</text>`}
+    s+=`<g transform="translate(${x} ${y})" fill="#1b1410"><path d="M0 0L-3 -5 0 -50 3 -5Z"/><path d="M0 0L-4.5 -6 0 -34 4.5 -6Z" transform="rotate(${h*30})"/><circle r="5.5" fill="#b8924a" stroke="#1b1410" stroke-width="1.5"/></g>
+    <text class="c" x="${x}" y="${y+136}">${n}</text>`;
+  });
+  return s+'</svg>';
+}
+$('#plate').innerHTML=plate('a');
+const lb=$('#lb'),lbs=$('#lbs');
+function closeLb(){lb.hidden=true;document.body.style.overflow='';$('#plate').focus()}
+$('#plate').onclick=()=>{lbs.innerHTML=plate('z');lb.hidden=false;document.body.style.overflow='hidden';lbs.scrollTop=0;$('#lbx').focus()};
+$('#lbx').onclick=closeLb;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)closeLb()});
+
+/* ---- hints (text is only inserted when unlocked) ---- */
+const hw=$('#hints');
+HINTS.forEach((h,i)=>{
+  const d=document.createElement('div');d.className='hint locked';
+  d.innerHTML=`<button type="button" disabled aria-expanded="false"><b>${i+1}</b><span><span class="ht">Hint ${i+1}</span><span class="hs">SEALED · OPENS AT ${fmt(h.t)}</span></span><span class="ch">▾</span></button><p class="hb" hidden></p>`;
+  const b=d.firstChild,p=d.lastChild;
+  b.onclick=()=>{const o=p.hidden;p.hidden=!o;b.setAttribute('aria-expanded',o);d.classList.toggle('open',o)};
+  h.el=d;hw.appendChild(d);
+});
+function unlock(h){
+  const d=h.el,b=d.firstChild,p=d.lastChild;h.on=true;
+  d.classList.remove('locked');d.classList.add('open','fresh');
+  d.querySelector('.hs').textContent='HINT UNLOCKED';
+  p.textContent=h.x;p.hidden=false;b.disabled=false;b.setAttribute('aria-expanded','true');
+  try{navigator.vibrate&&navigator.vibrate(70)}catch(e){}
+}
+
+/* ---- Polybius square ---- */
+let g='<span class="pc"></span>';
+for(let c=1;c<=5;c++)g+=`<span class="pc">${c}</span>`;
+["ABCDE","FGHIK","LMNOP","QRSTU","VWXYZ"].forEach((r,i)=>{
+  g+=`<span class="pc">${i+1}</span>`;
+  [...r].forEach(ch=>g+=`<span class="pl">${ch}</span>`);
+});
+$('#pg5').innerHTML=g;
+
+/* ---- countdown & persistence via localStorage ---- */
+const TOTAL=240;
+let END = localStorage.getItem('six_clocks_end');
+if (!END) {
+  END = Date.now() + TOTAL * 1000;
+  localStorage.setItem('six_clocks_end', END);
+} else {
+  END = parseInt(END, 10);
+}
+
+const bar=$('#bar'),tm=$('#tm'),lbl=$('#lbl'),pg=$('#pg');
+let done = localStorage.getItem('six_clocks_done') === 'true';
+let iv;
+
+function tick(){
+  if(done)return;
+  const rem=Math.max(0,Math.ceil((END-Date.now())/1000));
+  tm.textContent=fmt(rem);pg.style.width=(rem/TOTAL*100)+'%';
+  bar.classList.toggle('low',rem<=20);
+  HINTS.forEach(h=>{if(!h.on && (TOTAL - rem) >= (TOTAL - h.t)) unlock(h);});
+  if(rem<=0){
+    clearInterval(iv);
+    bar.classList.add('up');
+    lbl.textContent="TIME'S UP";
+  }
+}
+
+// Pre-unlock hints if time has already passed (e.g., after refresh)
+const elapsed = TOTAL - Math.max(0, Math.ceil((END - Date.now()) / 1000));
+HINTS.forEach(h => {
+  if (elapsed >= (TOTAL - h.t)) unlock(h);
+});
+
+tick();
+iv=setInterval(tick,250);
+document.addEventListener('visibilitychange',tick);
+
+/* ---- answer ---- */
+const ans=$('#ans'),res=$('#res'),MAX=5;
+let tries = parseInt(localStorage.getItem('six_clocks_tries') || '0', 10);
+
+// Restore solved state if previously completed
+if (done) {
+  bar.classList.add('solved');
+  lbl.textContent='CASE SOLVED';
+  ans.disabled=$('#go').disabled=true;
+  res.innerHTML='<div class="ok"><h3>CASE CLOSED</h3><p>THE LETTER IS I</p><a class="completed-home-btn" href="../index.html">BACK TO HOME</a></div>';
+} else if (tries >= MAX) {
+  ans.disabled=$('#go').disabled=true;
+  res.innerHTML='<div class="no"><h3>NO ATTEMPTS LEFT</h3><p>Five guesses used.</p></div>';
+}
+
+$('#f').addEventListener('submit',e=>{
+  e.preventDefault();
+  if(done || tries >= MAX)return;
+  const v=ans.value.trim().toUpperCase();
+  if(!v){res.innerHTML='<div class="no"><h3>NO LETTER</h3><p>Type a single letter first.</p></div>';return}
+  tries++;
+  localStorage.setItem('six_clocks_tries', tries);
+
+  if(v==='I'){
+    done=true;
+    localStorage.setItem('six_clocks_done', 'true');
+    clearInterval(iv);
+    bar.classList.remove('low');
+    bar.classList.add('solved');
+    lbl.textContent='CASE SOLVED';
+    ans.disabled=$('#go').disabled=true;
+    res.innerHTML='<div class="ok"><h3>CASE CLOSED</h3><p>THE LETTER IS I</p><a class="completed-home-btn" href="../index.html">BACK TO HOME</a></div>';
+  }else if(tries>=MAX){
+    ans.disabled=$('#go').disabled=true;
+    res.innerHTML='<div class="no"><h3>NO ATTEMPTS LEFT</h3><p>Five guesses used.</p></div>';
+    ans.value='';
+  }else{
+    const left=MAX-tries;
+    res.innerHTML=`<div class="no"><h3>INCORRECT</h3><p>${left} attempt${left===1?'':'s'} remaining.</p></div>`;
+    ans.value='';
+  }
+  ans.blur();res.scrollIntoView({behavior:'smooth',block:'center'});
+});
+</script>
+</body>
+</html>
