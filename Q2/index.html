@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE DON'S LAST MESSAGE — Case File 047</title>
+    <meta name="description" content="A cinematic mafia password investigation. Crack the Don's terminal to uncover the traitor.">
+    <meta name="theme-color" content="#0d0d0f">
+    <meta property="og:title" content="THE DON'S LAST MESSAGE — Case File 047">
+    <meta property="og:description" content="A cinematic mafia password investigation game. Decode the clues, satisfy the rules, and crack the terminal.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SCREEN 1: BOOT / INTRO -->
+    <div id="screen-boot" class="screen active">
+        <div class="boot-header">
+            <a href="../index.html" style="color:var(--gold); text-decoration:none; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; border:1px solid rgba(201,168,76,0.4); padding:4px 10px; border-radius:3px;">&larr; BACK TO CIPHER</a>
+            <span class="header-label">DETECTIVE DIVISION &bull; CONFIDENTIAL</span>
+            <span class="header-label">CASE FILE 047</span>
+        </div>
+        <div class="boot-hero">
+            <div class="spade-icon">&#9824;</div>
+            <h1 class="boot-title">THE DON'S<br>LAST MESSAGE</h1>
+            <p class="boot-subtitle"><em>A coded terminal recovered from the Don's private office. Night of the betrayal.</em></p>
+        </div>
+        <div class="boot-divider"></div>
+        <div class="boot-narrative" id="boot-narrative">
+            <p>At <strong>02:17 AM</strong>, you entered the Don's private office after receiving an anonymous tip.</p>
+            <br>
+            <p>His men were gone. His desk was empty.</p>
+            <br>
+            <p>Except for one locked terminal.</p>
+            <br>
+            <p>A note was attached:</p>
+            <blockquote class="boot-quote">"If you can open this,<br>you will know who betrayed me."</blockquote>
+        </div>
+        <button class="btn-primary" id="begin-btn">BEGIN CASE</button>
+    </div>
+
+    <!-- SCREEN 2: MAIN GAME -->
+    <div id="screen-game" class="screen">
+        <header class="game-header">
+            <a href="../index.html" style="color:var(--gold); text-decoration:none; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; border:1px solid rgba(201,168,76,0.4); padding:4px 10px; border-radius:3px;">&larr; BACK TO CIPHER</a>
+            <span class="header-label">DETECTIVE DIVISION &bull; CONFIDENTIAL</span>
+            <div class="header-center">
+                <span class="spade-icon-sm">&#9824;</span>
+            </div>
+            <span class="header-label">CASE FILE 047</span>
+        </header>
+
+        <div class="game-container">
+            <!-- LEFT: Evidence Panel -->
+            <div class="panel panel-left">
+                <div class="panel-label">01 &mdash; THE CASE</div>
+                <div id="evidence-scroll">
+                    <div class="narrative-text">
+                        <p>The Don's office. Everything has been removed — except the terminal and a collection of sealed documents. Each one contains a fragment of the access code.</p>
+                        <br>
+                        <p>You have one chance to decode them all.</p>
+                    </div>
+                    <div id="evidence-stack"></div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Terminal Panel -->
+            <div class="panel panel-right">
+                <div class="panel-label">02 &mdash; THE TERMINAL</div>
+
+                <div id="terminal-main">
+                    <p class="terminal-instruction">Decode the evidence. Enter the access password.</p>
+
+                    <div class="security-badge">
+                        SECURITY LEVEL &nbsp;<span id="level-num">01</span>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label class="input-label">ENTER ACCESS PASSWORD</label>
+                        <input type="text" id="password-input" class="password-field" placeholder="What does the Don protect?" autocomplete="off" spellcheck="false">
+                    </div>
+
+                    <button class="btn-primary btn-submit" id="decrypt-btn">SUBMIT EVIDENCE</button>
+
+                    <div id="timer-bar">
+                        <span class="timer-label">CASE TIMER</span>
+                        <span id="timer" class="timer-value">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Failure response overlay -->
+                <div id="terminal-response" class="terminal-response hidden">
+                    <div class="response-title">&#9888; ACCESS DENIED</div>
+                    <div class="response-divider"></div>
+                    <div id="response-hint-badge" class="hint-badge" style="display:none"></div>
+                    <div id="response-msg" class="response-body"></div>
+                    <button class="btn-secondary" id="return-btn">&#8592; RETURN TO TERMINAL</button>
+                </div>
+
+                <!-- Success: new clue unlocked -->
+                <div id="clue-unlocked" class="clue-unlocked hidden">
+                    <div class="clue-title">&#9670; NEW REQUIREMENT DISCOVERED</div>
+                    <div id="clue-msg" class="clue-body"></div>
+                    <button class="btn-secondary" id="clue-continue-btn">CONTINUE INVESTIGATION &#8594;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: FINAL SEQUENCE -->
+    <div id="screen-final" class="screen final-screen">
+        <div id="final-step-1" class="final-step">
+            <div class="final-box">
+                <div class="final-box-title">TERMINAL UNLOCKED</div>
+                <div class="final-box-divider"></div>
+                <div class="final-box-body">VERIFYING CREDENTIALS...</div>
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-pct" id="progress-pct">0%</div>
+                <div class="final-box-body access-granted hidden" id="access-granted-text">ACCESS GRANTED</div>
+            </div>
+        </div>
+
+        <div id="final-step-2" class="final-step hidden">
+            <div class="audio-timestamp">02:21 AM</div>
+            <div class="audio-label">AUDIO LOG RECOVERED</div>
+            <div class="audio-divider"></div>
+            <div id="audio-lines"></div>
+        </div>
+
+        <div id="final-step-3" class="final-step hidden">
+            <p class="decrypt-label">DECRYPTING FINAL EVIDENCE...</p>
+            <div class="progress-bar-wrap decrypt-bar">
+                <div class="progress-bar-fill" id="decrypt-fill"></div>
+            </div>
+            <div class="progress-pct" id="decrypt-pct">0%</div>
+        </div>
+
+        <div id="final-step-4" class="final-step hidden">
+            <div class="reveal-eyebrow">DECRYPTION COMPLETE</div>
+            <div class="reveal-divider"></div>
+            <div class="reveal-label">FINAL KEY RECOVERED</div>
+
+            <div class="reveal-ring">
+                <div class="reveal-ring-inner">
+                    <div class="final-letter" id="final-letter-O">O</div>
+                </div>
+            </div>
+
+            <div class="reveal-narrative">
+                <p>The Don's last message has been decoded.</p>
+                <br>
+                <p>Every clue led here &mdash; the birthday, the name, the seal, the ledger.</p>
+                <br>
+                <p>But the final mark was always <strong>O</strong>.</p>
+                <br>
+                <p><em>"Every man in the family knows the mark.<br>Without it, the door stays closed."</em></p>
+            </div>
+
+            <div class="hint-carry">
+                <div class="hint-carry-label">&#9670; YOUR HINT FOR CASE 048 &#9670;</div>
+                <div class="hint-carry-letter">O</div>
+                <div class="hint-carry-note">Remember this letter. You will need it for the next case.</div>
+            </div>
+
+            <div class="time-result" id="time-result">
+                <div class="time-result-label">&#9201; CASE SOLVED IN</div>
+                <div class="time-result-value" id="time-result-value">--:--</div>
+            </div>
+
+            <a class="btn-primary" href="../index.html" style="text-decoration:none; display:inline-block; text-align:center;">RETURN TO CIPHER &rarr;</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
