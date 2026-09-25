@@ -3,10 +3,10 @@ const ANSWER_HASH = "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08
 
 const HINTS = [
   { at: 0,  text: "A photograph carries more than what's on screen -- quiet details about how and when it was made travel inside the file itself (metadata)." },
-  { at: 60, text: "There are free tools online built just for reading what's hidden inside a file (metadata) like this. Search for one of those sites" },
-  { at: 120, text: "try exifdata.com or jimpl.com or metadata2go.com" },  
-  { at: 180, text: "look for the author and copyright field" },  
-  { at: 240, text: "one of the letters of the acronym this building is popularly referred to as" }
+  { at: 30, text: "There are free tools online built just for reading what's hidden inside a file (metadata) like this. Search for one of those sites" },
+  { at: 60, text: "try exifdata.com or jimpl.com or metadata2go.com" },  
+  { at: 90, text: "look for the author and copyright field" },  
+  { at: 120, text: "one of the letters of the acronym this building is popularly referred to as" }
 ];
 
 let startTime = null;
